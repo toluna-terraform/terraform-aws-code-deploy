@@ -36,8 +36,8 @@ resource "aws_codedeploy_deployment_group" "deployment_group" {
   }
 
   ecs_service {
-    cluster_name = var.cluster_name
-    service_name = var.service_name
+    cluster_name = var.ecs_cluster_name
+    service_name = var.ecs_service_name
   }
 
   load_balancer_info {
@@ -77,8 +77,8 @@ resource "aws_iam_role" "codedeploy_role" {
 }
 
 resource "aws_iam_role_policy" "cloudWatch_policy" {
-  name = "test_policy"
-  role = aws_iam_role.codebuild_role.id
+  name = "policy-${var.env_name}-cloudWatch_policy"
+  role = aws_iam_role.codedeploy_role.id
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -98,6 +98,8 @@ resource "aws_iam_role_policy" "cloudWatch_policy" {
   })
 }
 
-provider "aws" {
-    region = var.aws_region
+resource "aws_iam_role_policy" "ecs_policy" {
+  name = "policy-${var.env_name}-ecs_policy"
+  role = aws_iam_role.codedeploy_role.id
+  policy = data.aws_iam_policy_document.codedeploy_role_policy.json
 }
