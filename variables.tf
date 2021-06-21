@@ -2,6 +2,10 @@
      type     = string
  }
 
+ variable "s3_bucket" {
+    type = string
+}
+
  variable "ecs_cluster_name" {
      type     = string
  }
