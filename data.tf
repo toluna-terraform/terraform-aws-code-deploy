@@ -46,10 +46,7 @@ data "aws_iam_policy_document" "codedeploy_role_policy" {
   }
   statement {
     actions   = ["iam:PassRole"]
-    resources = [
-        "arn:aws:iam::*:role/role-ecs-chorus-${var.env_name}",
-        "arn:aws:iam::*:role/role-ecs-xray-chorus-${var.env_name}"
-        ]
+    resources = var.ecs_iam_roles_arns
   }
 
   statement {
